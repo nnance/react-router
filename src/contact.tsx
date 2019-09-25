@@ -1,5 +1,17 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 
-export default function Contact() {
-  return <h1>Contact</h1>;
-}
+const Contact = withRouter(({ history }) => {
+
+  const onSubmit = () => history.push("/");
+
+  return (
+    <form>
+      <input placeholder="name" type="name" />
+      <input placeholder="email" type="email" />
+      <button onClick={onSubmit}>Submit</button>
+    </form>
+  );
+});
+
+export default Contact;
