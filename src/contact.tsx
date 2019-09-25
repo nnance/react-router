@@ -2,7 +2,6 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 
 const Contact = withRouter(({ history }) => {
-
   const onSubmit = () => history.push("/");
 
   return (
