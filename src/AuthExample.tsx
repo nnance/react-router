@@ -5,11 +5,11 @@ import {
   Link,
   Redirect,
   withRouter,
-  RouteProps,
-  RouteComponentProps
+  RouteProps
 } from "react-router-dom";
 
 import { useFakeAuth, AuthContext } from "./AuthContext";
+import Login from "./login";
 
 ////////////////////////////////////////////////////////////
 // 1. Click the public page
@@ -34,18 +34,18 @@ function AuthExample() {
           </ul>
           <Route path="/public" component={Public} />
           <Route path="/login" component={Login} />
-          <PrivateRoute path="/protected" component={Protected}/>
+          <PrivateRoute path="/protected" component={Protected} />
         </div>
       </Router>
     </AuthContext.Provider>
   );
 }
 
-const AuthButton = withRouter(
-  ({ history }) => {
-    return (
-      <AuthContext.Consumer>
-        { fakeAuth => fakeAuth.isAuthenticated ? (
+const AuthButton = withRouter(({ history }) => {
+  return (
+    <AuthContext.Consumer>
+      {fakeAuth =>
+        fakeAuth.isAuthenticated ? (
           <p>
             Welcome!{" "}
             <button
@@ -56,61 +56,45 @@ const AuthButton = withRouter(
               Sign out
             </button>
           </p>
-          ) : (
-            <p>You are not logged in.</p>
-          )
-        }
-      </AuthContext.Consumer>
-    )
-  }
-);
+        ) : (
+          <p>You are not logged in.</p>
+        )
+      }
+    </AuthContext.Consumer>
+  );
+});
 
 const PrivateRoute = (props: RouteProps) => {
   const Component = props.component;
   return (
     <AuthContext.Consumer>
-      { fakeAuth => (
-        <Route path={props.path} render={routeProps => (
-          fakeAuth.isAuthenticated && Component ? (
-            <Component {...routeProps}/>
-          ) : (
-            <Redirect to={{ pathname: "/login", state: { from: routeProps.location } }}/>
-          )
-        )}/>    
+      {fakeAuth => (
+        <Route
+          path={props.path}
+          render={routeProps =>
+            fakeAuth.isAuthenticated && Component ? (
+              <Component {...routeProps} />
+            ) : (
+              <Redirect
+                to={{
+                  pathname: "/login",
+                  state: { from: routeProps.location }
+                }}
+              />
+            )
+          }
+        />
       )}
-      </AuthContext.Consumer>
-  )
-}
+    </AuthContext.Consumer>
+  );
+};
 
 function Public() {
   return <h3>Public</h3>;
 }
 
 function Protected() {
-  return <h3>Protected</h3>
-}
-
-function Login(props: RouteComponentProps) {
-  const [state, setState] = React.useState({ redirectToReferrer: false });
-  const fakeAuth = React.useContext(AuthContext);
-
-  const login = () => {
-    fakeAuth.authenticate(() => {
-      setState({ redirectToReferrer: true });
-    });
-  };
-
-  let { from } = props.location.state || { from: { pathname: "/" } };
-  let { redirectToReferrer } = state;
-
-  if (redirectToReferrer) return <Redirect to={from} />;
-
-  return (
-    <div>
-      <p>You must log in to view the page at {from.pathname}</p>
-      <button onClick={login}>Log in</button>
-    </div>
-  );
+  return <h3>Protected</h3>;
 }
 
 export default AuthExample;
