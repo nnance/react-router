@@ -10,6 +10,7 @@ import {
 
 import { useFakeAuth, AuthContext } from "./AuthContext";
 import Login from "./login";
+import AuthButton from "./AuthButton";
 
 ////////////////////////////////////////////////////////////
 // 1. Click the public page
@@ -40,29 +41,6 @@ function AuthExample() {
     </AuthContext.Provider>
   );
 }
-
-const AuthButton = withRouter(({ history }) => {
-  return (
-    <AuthContext.Consumer>
-      {fakeAuth =>
-        fakeAuth.isAuthenticated ? (
-          <p>
-            Welcome!{" "}
-            <button
-              onClick={() => {
-                fakeAuth.signout(() => history.push("/"));
-              }}
-            >
-              Sign out
-            </button>
-          </p>
-        ) : (
-          <p>You are not logged in.</p>
-        )
-      }
-    </AuthContext.Consumer>
-  );
-});
 
 const PrivateRoute = (props: RouteProps) => {
   const Component = props.component;
