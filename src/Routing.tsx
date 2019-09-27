@@ -12,9 +12,9 @@ import App from "./App";
 import Users from "./users";
 import Contact from "./contact";
 import Notfound from "./notfound";
-import Login from "./login";
-import { AuthContext, useFakeAuth } from "./AuthContext";
-import AuthButton from "./AuthButton";
+import Login from "./components/Login";
+import { AuthContext, useFakeAuth } from "./components/AuthContext";
+import AuthButton from "./components/AuthButton";
 
 export default function Routing() {
   const auth = useFakeAuth();

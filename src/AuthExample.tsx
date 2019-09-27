@@ -7,9 +7,9 @@ import {
   RouteProps
 } from "react-router-dom";
 
-import { useFakeAuth, AuthContext } from "./AuthContext";
-import Login from "./login";
-import AuthButton from "./AuthButton";
+import { useFakeAuth, AuthContext } from "./components/AuthContext";
+import Login from "./components/Login";
+import AuthButton from "./components/AuthButton";
 
 ////////////////////////////////////////////////////////////
 // 1. Click the public page
