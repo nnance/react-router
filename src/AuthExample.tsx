@@ -4,7 +4,6 @@ import {
   Route,
   Link,
   Redirect,
-  withRouter,
   RouteProps
 } from "react-router-dom";
 
