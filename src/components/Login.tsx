@@ -1,24 +1,19 @@
 import React from "react";
 import { AuthContext } from "./AuthContext";
-import { RouteComponentProps, Redirect } from "react-router";
+import { RouteComponentProps } from "react-router";
 
 export default function Login(props: RouteComponentProps) {
-  const [state, setState] = React.useState({ redirectToReferrer: false });
   const fakeAuth = React.useContext(AuthContext);
+
+  const { from } = props.location.state || { from: { pathname: "/" } };
 
   const login = () => {
     fakeAuth.dispatch({
       type: "login",
       user: "God",
-      cb: () => setState({ redirectToReferrer: true })
+      redirect: from
     });
   };
-
-  let { from } = props.location.state || { from: { pathname: "/" } };
-  let { redirectToReferrer } = state;
-
-  if (redirectToReferrer && fakeAuth.isAuthenticated)
-    return <Redirect to={from} />;
 
   return (
     <div>

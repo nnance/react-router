@@ -5,7 +5,8 @@ import {
   BrowserRouter as Router,
   Switch,
   RouteProps,
-  Redirect
+  Redirect,
+  useHistory
 } from "react-router-dom";
 
 import App from "./App";
@@ -16,42 +17,49 @@ import Login from "./components/Login";
 import { AuthContext, useFakeAuth } from "./components/AuthContext";
 import AuthButton from "./components/AuthButton";
 
-export default function Routing() {
-  const auth = useFakeAuth();
+const Auth = () => {
+  const history = useHistory();
+  const auth = useFakeAuth(history);
 
   return (
     <AuthContext.Provider value={auth}>
-      <Router>
-        <div>
-          <ul>
-            <li>
-              <NavLink exact activeClassName="active" to="/">
-                Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink activeClassName="active" to="/users">
-                Users
-              </NavLink>
-            </li>
-            <li>
-              <NavLink activeClassName="active" to="/contact">
-                Contact
-              </NavLink>
-            </li>
-          </ul>
-          <hr />
-          <Switch>
-            <Route exact path="/" component={App} />
-            <PrivateRoute path="/users" component={Users} />
-            <Route path="/contact" component={Contact} />
-            <Route path="/login" component={Login} />
-            <Route component={Notfound} />
-          </Switch>
-          <AuthButton />
-        </div>
-      </Router>
+      <div>
+        <ul>
+          <li>
+            <NavLink exact activeClassName="active" to="/">
+              Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink activeClassName="active" to="/users">
+              Users
+            </NavLink>
+          </li>
+          <li>
+            <NavLink activeClassName="active" to="/contact">
+              Contact
+            </NavLink>
+          </li>
+        </ul>
+        <hr />
+        <Switch>
+          <Route exact path="/" component={App} />
+          <PrivateRoute path="/users" component={Users} />
+          <Route path="/contact" component={Contact} />
+          <Route path="/login" component={Login} />
+          <Route component={Notfound} />
+        </Switch>
+        <AuthButton />
+      </div>
     </AuthContext.Provider>
+  );
+};
+
+export default function Routing() {
+  return (
+    <Router>
+      <Auth />
+    </Router>
   );
 }
 

@@ -13,7 +13,7 @@ const AuthButton = withRouter(({ history }) => {
               onClick={() =>
                 fakeAuth.dispatch({
                   type: "logout",
-                  cb: () => history.push("/")
+                  redirect: "/"
                 })
               }
             >

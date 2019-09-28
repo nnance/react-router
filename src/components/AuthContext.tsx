@@ -11,26 +11,25 @@ export const AuthContext = React.createContext<Auth>({
 });
 
 type Action =
-  | { type: "login"; user: string; cb?: (state: boolean) => void }
-  | { type: "logout"; cb?: (state: boolean) => void };
+  | { type: "login"; user: string; redirect?: string }
+  | { type: "logout"; redirect?: string };
 
-const stateReducer = (state: boolean, { type, ...rest }: Action) => {
-  switch (type) {
-    case "login":
-      return true;
-    case "logout":
-      return false;
-    default:
-      return state;
-  }
-};
+export function useFakeAuth(history: any) {
+  const stateReducer = (state: boolean, { type, ...rest }: Action) => {
+    switch (type) {
+      case "login": {
+        if (rest.redirect) history.redirect(rest.redirect);
+        return true;
+      }
+      case "logout":
+        if (rest.redirect) history.redirect(rest.redirect);
+        return false;
+      default:
+        return state;
+    }
+  };
 
-export function useFakeAuth() {
-  const [isAuthenticated, dispatch] = React.useReducer((state, action) => {
-    const newState = stateReducer(state, action);
-    if (action.cb) action.cb(newState);
-    return newState;
-  }, false);
+  const [isAuthenticated, dispatch] = React.useReducer(stateReducer, false);
 
   // const fakeAuth = (cb: () => void, result: boolean) => {
   //   setTimeout(() => {
