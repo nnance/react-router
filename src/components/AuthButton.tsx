@@ -9,7 +9,14 @@ const AuthButton = withRouter(({ history }) => {
         fakeAuth.isAuthenticated ? (
           <p>
             Welcome!{" "}
-            <button onClick={() => fakeAuth.dispatch({ type: "logout" })}>
+            <button
+              onClick={() =>
+                fakeAuth.dispatch({
+                  type: "logout",
+                  cb: () => history.push("/")
+                })
+              }
+            >
               Sign out
             </button>
           </p>

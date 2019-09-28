@@ -10,22 +10,27 @@ export const AuthContext = React.createContext<Auth>({
   dispatch: () => {}
 });
 
-type Action = { type: "login"; user: string } | { type: "logout" };
+type Action =
+  | { type: "login"; user: string; cb?: (state: boolean) => void }
+  | { type: "logout"; cb?: (state: boolean) => void };
 
-const reducer = (state: boolean, { type, ...rest }: Action) => {
-  if (type === "login") {
-    return true;
-  } else if (type === "logout") {
-    // history.push("/");
-    return false;
-  } else {
-    return state;
+const stateReducer = (state: boolean, { type, ...rest }: Action) => {
+  switch (type) {
+    case "login":
+      return true;
+    case "logout":
+      return false;
+    default:
+      return state;
   }
 };
 
-export function useFakeAuth(\) {
-  // const history = useHistory();
-  const [isAuthenticated, dispatch] = React.useReducer(reducer, false);
+export function useFakeAuth() {
+  const [isAuthenticated, dispatch] = React.useReducer((state, action) => {
+    const newState = stateReducer(state, action);
+    if (action.cb) action.cb(newState);
+    return newState;
+  }, false);
 
   // const fakeAuth = (cb: () => void, result: boolean) => {
   //   setTimeout(() => {
