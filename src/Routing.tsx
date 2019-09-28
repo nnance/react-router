@@ -15,9 +15,11 @@ import Notfound from "./notfound";
 import Login from "./components/Login";
 import { AuthContext, useFakeAuth } from "./components/AuthContext";
 import AuthButton from "./components/AuthButton";
+import { useHistory } from "react-router";
 
 export default function Routing() {
   const auth = useFakeAuth();
+  const history = useHistory();
 
   return (
     <AuthContext.Provider value={auth}>

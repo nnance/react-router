@@ -1,34 +1,47 @@
 import React from "react";
 
-export type FakeAuth = {
+type Auth = {
   isAuthenticated: boolean;
-  authenticate: (cb: () => void) => void;
-  signout: (cb: () => void) => void;
+  dispatch: React.Dispatch<Action>;
 };
 
-export const AuthContext = React.createContext<FakeAuth>({
+export const AuthContext = React.createContext<Auth>({
   isAuthenticated: false,
-  authenticate: () => {},
-  signout: () => {}
+  dispatch: () => {}
 });
 
-export function useFakeAuth(): FakeAuth {
-  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+type Action = { type: "login"; user: string } | { type: "logout" };
 
-  const fakeAuth = (cb: () => void, result: boolean) => {
-    setTimeout(() => {
-      setIsAuthenticated(result);
-      cb();
-    }, 100);
-  };
+const reducer = (state: boolean, { type, ...rest }: Action) => {
+  if (type === "login") {
+    return true;
+  } else if (type === "logout") {
+    // history.push("/");
+    return false;
+  } else {
+    return state;
+  }
+};
+
+export function useFakeAuth(\) {
+  // const history = useHistory();
+  const [isAuthenticated, dispatch] = React.useReducer(reducer, false);
+
+  // const fakeAuth = (cb: () => void, result: boolean) => {
+  //   setTimeout(() => {
+  //     setIsAuthenticated(result);
+  //     cb();
+  //   }, 100);
+  // };
 
   return {
     isAuthenticated,
-    authenticate: (cb: () => void) => {
-      fakeAuth(cb, true); // fake async
-    },
-    signout: (cb: () => void) => {
-      fakeAuth(cb, false);
-    }
+    dispatch
+    // authenticate: (cb: () => void) => {
+    //   fakeAuth(cb, true); // fake async
+    // },
+    // signout: (cb: () => void) => {
+    //   fakeAuth(cb, false);
+    // }
   };
 }

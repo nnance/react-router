@@ -7,15 +7,16 @@ export default function Login(props: RouteComponentProps) {
   const fakeAuth = React.useContext(AuthContext);
 
   const login = () => {
-    fakeAuth.authenticate(() => {
-      setState({ redirectToReferrer: true });
-    });
+    // TODO: make async
+    fakeAuth.dispatch({ type: "login", user: "God" });
+    setState({ redirectToReferrer: true });
   };
 
   let { from } = props.location.state || { from: { pathname: "/" } };
   let { redirectToReferrer } = state;
 
-  if (redirectToReferrer) return <Redirect to={from} />;
+  if (redirectToReferrer && fakeAuth.isAuthenticated)
+    return <Redirect to={from} />;
 
   return (
     <div>
