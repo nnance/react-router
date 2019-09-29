@@ -2,7 +2,7 @@ import React from "react";
 import { withRouter } from "react-router";
 import { AuthContext } from "./AuthContext";
 
-const AuthButton = withRouter(({ history }) => {
+const AuthButton = withRouter(() => {
   return (
     <AuthContext.Consumer>
       {fakeAuth =>
@@ -10,12 +10,9 @@ const AuthButton = withRouter(({ history }) => {
           <p>
             Welcome!{" "}
             <button
-              onClick={() =>
-                fakeAuth.dispatch({
-                  type: "logout",
-                  redirect: "/"
-                })
-              }
+              onClick={() => {
+                if (fakeAuth.logout) fakeAuth.logout();
+              }}
             >
               Sign out
             </button>

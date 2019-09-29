@@ -8,11 +8,7 @@ export default function Login(props: RouteComponentProps) {
   const { from } = props.location.state || { from: { pathname: "/" } };
 
   const login = () => {
-    fakeAuth.dispatch({
-      type: "login",
-      user: "God",
-      redirect: from
-    });
+    if (fakeAuth.login) fakeAuth.login("God");
   };
 
   return (
