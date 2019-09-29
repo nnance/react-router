@@ -18,11 +18,11 @@ export function useFakeAuth(history: any) {
   const stateReducer = (state: boolean, { type, ...rest }: Action) => {
     switch (type) {
       case "login": {
-        if (rest.redirect) history.redirect(rest.redirect);
+        if (rest.redirect) history.push(rest.redirect);
         return true;
       }
       case "logout":
-        if (rest.redirect) history.redirect(rest.redirect);
+        if (rest.redirect) history.push(rest.redirect);
         return false;
       default:
         return state;
