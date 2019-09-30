@@ -1,46 +1,64 @@
 import React from "react";
+import { useHistory } from "react-router";
 
 type Auth = {
   isAuthenticated: boolean;
-  login: (user: string) => Promise<void>;
-  logout: () => Promise<void>;
+  user?: string;
 };
 
-export const AuthContext = React.createContext<Partial<Auth>>({
-  isAuthenticated: false
+type AuthContext = {
+  auth: Auth;
+  dispatch: React.Dispatch<Action>;
+};
+
+export const AuthContext = React.createContext<AuthContext>({
+  auth: { isAuthenticated: false },
+  dispatch: action => {}
 });
 
-type Action =
-  | { type: "login"; user: string; redirect?: string }
-  | { type: "logout"; redirect?: string };
+type Action = { type: "login"; user: string } | { type: "logout" };
 
+// TODO: add support for user name
 export function useFakeAuth() {
-  const stateReducer = (state: boolean, { type, ...rest }: Action) => {
+  const stateReducer = (state: Auth, { type, ...rest }: Action) => {
     switch (type) {
-      case "login": {
-        // if (rest.redirect) history.push(rest.redirect);
-        return true;
-      }
+      case "login":
+        return { isAuthenticated: true };
       case "logout":
-        // if (rest.redirect) history.push(rest.redirect);
-        return false;
-      default:
-        return state;
+        return { isAuthenticated: false };
     }
   };
 
-  const [isAuthenticated, dispatch] = React.useReducer(stateReducer, false);
+  const [auth, dispatch] = React.useReducer(stateReducer, {
+    isAuthenticated: false
+  });
+
+  return {
+    auth,
+    dispatch
+  };
+}
+
+export const useAuthContext = (authContext: React.Context<AuthContext>) => {
+  const context = React.useContext(authContext);
+  const history = useHistory();
 
   const fakeAPICall = async () => setTimeout(() => true, 100);
 
-  const login = (user: string) =>
-    fakeAPICall().then(() => dispatch({ type: "login", user }));
+  const login = (user: string, redirect?: string) =>
+    fakeAPICall().then(() => {
+      context.dispatch({ type: "login", user });
+      if (redirect) history.push(redirect);
+    });
 
-  const logout = () => fakeAPICall().then(() => dispatch({ type: "logout" }));
+  const logout = (redirect?: string) =>
+    fakeAPICall().then(() => {
+      context.dispatch({ type: "logout" });
+      if (redirect) history.push(redirect);
+    });
 
   return {
-    isAuthenticated,
     login,
     logout
   };
-}
+};

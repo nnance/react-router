@@ -5,8 +5,8 @@ import {
   BrowserRouter as Router,
   Switch,
   RouteProps,
-  Redirect,
-  useHistory
+  Redirect
+  // useHistory
 } from "react-router-dom";
 
 import App from "./App";
@@ -18,11 +18,10 @@ import { AuthContext, useFakeAuth } from "./components/AuthContext";
 import AuthButton from "./components/AuthButton";
 
 const Auth = () => {
-  const history = useHistory();
-  const auth = useFakeAuth(history);
+  const fakeAuth = useFakeAuth();
 
   return (
-    <AuthContext.Provider value={auth}>
+    <AuthContext.Provider value={fakeAuth}>
       <div>
         <ul>
           <li>
@@ -71,7 +70,7 @@ const PrivateRoute = (props: RouteProps) => {
         <Route
           path={props.path}
           render={routeProps =>
-            fakeAuth.isAuthenticated && Component ? (
+            fakeAuth.auth.isAuthenticated && Component ? (
               <Component {...routeProps} />
             ) : (
               <Redirect
