@@ -39,23 +39,27 @@ export function useFakeAuth() {
   };
 }
 
+const fakeAPICall = async () => setTimeout(() => true, 100);
+
 export const useAuthContext = (authContext: React.Context<AuthContext>) => {
   const context = React.useContext(authContext);
   const history = useHistory();
 
-  const fakeAPICall = async () => setTimeout(() => true, 100);
-
-  const login = (user: string, redirect?: string) =>
-    fakeAPICall().then(() => {
+  const login = async (user: string, redirect?: string) => {
+    const result = await fakeAPICall();
+    if (result) {
       context.dispatch({ type: "login", user });
       if (redirect) history.push(redirect);
-    });
+    }
+  };
 
-  const logout = (redirect?: string) =>
-    fakeAPICall().then(() => {
+  const logout = async (redirect?: string) => {
+    const result = await fakeAPICall();
+    if (result) {
       context.dispatch({ type: "logout" });
       if (redirect) history.push(redirect);
-    });
+    }
+  };
 
   return {
     login,
