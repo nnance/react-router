@@ -39,6 +39,16 @@ export function useFakeAuth() {
   };
 }
 
+export const AuthProvider: React.FC = props => {
+  const fakeAuth = useFakeAuth();
+
+  return (
+    <AuthContext.Provider value={fakeAuth}>
+      {props.children}
+    </AuthContext.Provider>
+  );
+};
+
 const fakeAPICall = async () => setTimeout(() => true, 100);
 
 export const useAuthContext = (authContext: React.Context<AuthContext>) => {

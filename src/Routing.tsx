@@ -14,14 +14,12 @@ import Users from "./users";
 import Contact from "./contact";
 import Notfound from "./notfound";
 import Login from "./components/Login";
-import { AuthContext, useFakeAuth } from "./components/AuthContext";
+import { AuthContext, AuthProvider } from "./components/AuthContext";
 import AuthButton from "./components/AuthButton";
 
 const Auth = () => {
-  const fakeAuth = useFakeAuth();
-
   return (
-    <AuthContext.Provider value={fakeAuth}>
+    <AuthProvider>
       <div>
         <ul>
           <li>
@@ -50,7 +48,7 @@ const Auth = () => {
         </Switch>
         <AuthButton />
       </div>
-    </AuthContext.Provider>
+    </AuthProvider>
   );
 };
 
